@@ -22,10 +22,14 @@ public class BookController {
         return bookRepository.save(book);
     }
 
-    @PatchMapping("/{id}/{newTitle}")
-    public Book modifyBook(@PathVariable Long id, @PathVariable String newTitle) {
-        Book book = bookRepository.findById(id).orElseThrow();
-        book.setTitle(newTitle);
+    @PatchMapping
+    public Book modifyBook(@RequestBody Book request) {
+        if (request.getId() == null) {
+            throw new IllegalArgumentException("The ID value must be set!");
+        }
+        Book book = bookRepository.findById(request.getId()).orElseThrow();
+        if (request.getTitle() != null) book.setTitle(request.getTitle());
+        if (request.getAuthor() != null) book.setAuthor(request.getTitle());
         return bookRepository.save(book);
     }
 }
